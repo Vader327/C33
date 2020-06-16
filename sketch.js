@@ -47,13 +47,14 @@ function setup(){
 }
 
 function draw(){
-    if(backgroundImg)
+    if(backgroundImg){
         background(backgroundImg);
+    }
     
-        noStroke();
-        textSize(35)
-        fill("white")
-        text("Score  " + score, width-300, 50)
+    noStroke();
+    textSize(35)
+    fill("white")
+    text("Score  " + score, width-300, 50)
     
     Engine.update(engine);
     //strokeWeight(4);
@@ -81,9 +82,9 @@ function draw(){
 }
 
 function mouseDragged(){
-    //if (gameState!=="launched"){
+    if (gameState!=="launched"){
         Matter.Body.setPosition(bird.body, {x: mouseX , y: mouseY});
-    //}
+    }
 }
 
 
@@ -94,7 +95,15 @@ function mouseReleased(){
 
 function keyPressed(){
     if(keyCode === 32){
-       slingshot.attach(bird.body);
+        Matter.Body.setAngularVelocity(bird.body, 0);
+        Matter.Body.setVelocity(bird.body, {x: 0, y: 0});
+        Matter.Body.setPosition(bird.body, {x: 200 , y: 50});
+        Matter.Body.setAngle(bird.body, 0);
+
+        gameState = "onSling";
+
+        bird.trajectory = [];
+        slingshot.attach(bird.body);
     }
 }
 
@@ -113,5 +122,4 @@ async function getBackgroundImg(){
     }
 
     backgroundImg = loadImage(bg);
-    console.log(backgroundImg);
 }
